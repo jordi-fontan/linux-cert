@@ -1,0 +1,103 @@
+Find IP address in Linux command line
+Well, you can use the ip command for this purpose. ip command is versatile and can be used for several other things related to networking.
+
+But just to show the IP address, use the command with ip addr, ip a or ip address options (all are the same) in the following manner:
+
+ip address
+And you will see an output like this:
+
+1: lo: mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+inet 127.0.0.1/8 scope host lo
+valid_lft forever preferred_lft forever
+inet6 ::1/128 scope host
+valid_lft forever preferred_lft forever
+2: wlp58s0: mtu 1500 qdisc mq state UP group default qlen 1000
+link/ether 9c:b6:d0:d0:fc:b5 brd ff:ff:ff:ff:ff:ff
+inet 192.168.1.20/24 brd 192.168.1.255 scope global dynamic noprefixroute wlp58s0
+valid_lft 5962sec preferred_lft 5962sec
+inet6 fe80::bf14:21e3:4223:e5e4/64 scope link noprefixroute
+valid_lft forever preferred_lft forever
+In the above output, you can ignore the first one called lo (loopback). You can see that the IP address is displayed 192.168.1.20. The 24 that follows it is the subnet mask.
+
+Display IP address in Linux
+That’s it. That’s how you display the IP address of host system in Linux command line. You can use the same command to get the IP address via bash scripts as well.
+
+How to Find the IP Address of a Website in Linux Terminal
+Wondering how to get the IP address of a website in Linux? Here are 3 command line utilities to query the DNS and get you the IP address and other details.
+
+Linux Handbook
+Abhishek Prakash
+
+Other ways to find the IP address of your system in Linux
+There are more ways to check the IP address in Linux. Let me show you them as well.
+
+Show IP address with hostname command
+The hostname command usually displays the hostname of your system. It can also be used to display the IP address of the host:
+
+hostname -I
+It will simply display the IP address of the host in the terminal.
+
+abhishek@linuxhandbook:~$ hostname -I
+192.168.0.106
+Display IP address with nmcli tool
+Most Linux distributions come with a Network Manager tool. This tool has a command line interface called nmcli. You can use this nmcli tool to view a number of network configurations.
+
+The IP address can be displayed with:
+
+nmcli -p device show
+You should see the IP address in the output.
+
+What about ifconfig?
+Actually, you can still use ifconfig command. It is present in net-tools package. You can install it using the package manager of your system. However, use of net-tools is not encouraged so I suggest sticking with the ip command.
+
+In Ubuntu-based distributions, you can install net-tools using this command:
+
+sudo apt install net-tools
+Now you can use the ifconfig command to display the IP address of your system.
+
+ifconfig -a
+The output will be like this:
+
+lo: flags=73 mtu 65536
+inet 127.0.0.1 netmask 255.0.0.0
+inet6 ::1 prefixlen 128 scopeid 0x10
+loop txqueuelen 1000 (Local Loopback)
+RX packets 14855 bytes 3027297 (3.0 MB)
+RX errors 0 dropped 0 overruns 0 frame 0
+TX packets 14855 bytes 3027297 (3.0 MB)
+TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0
+wlp58s0: flags=4163 mtu 1500
+inet 192.168.0.106 netmask 255.255.255.0 broadcast 192.168.0.255
+inet6 fe80::bf14:21e3:4223:e5e4 prefixlen 64 scopeid 0x20
+ether 9c:b6:d0:d0:fc:b5 txqueuelen 1000 (Ethernet)
+RX packets 88413 bytes 61851930 (61.8 MB)
+RX errors 0 dropped 0 overruns 0 frame 0
+TX packets 56505 bytes 11409219 (11.4 MB)
+TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0
+Again, ifconfig has been deprecated and should not be used.
+
+Bonus Tip: Finding the public IP address of your system
+What you saw so far was to display the private IP address of your system. What I mean is that if you use a network router, you are most probably behind a NAT.
+
+The IP address of your system is a private one, used only for communicating with the devices on your sub-network. Any device outside your home/work network won’t be able to find you with this IP address. They need to now the IP address of your router. Your router recognizes your device and communicates via the private IP address.
+
+How do you get your public IP address (IP address of your router)? You’ll have to utilize third party tools.
+
+For example, you can use the host command with OpenDNS and get the public IP address:
+
+host myip.opendns.com resolver1.opendns.com
+The output should be similar to this:
+
+Using domain server:
+Name: resolver1.opendns.com
+Address: 208.67.222.222#53
+Aliases:
+myip.opendns.com has address 202.91.87.117
+Host myip.opendns.com not found: 3(NXDOMAIN)
+Host myip.opendns.com not found: 3(NXDOMAIN)
+In the end…
+
+I hope this quick tip helped you in finding the IP address of your system in Linux command line. You may also read about finding the gateway IP in Linux.
+
+As always, feel free to provide your feedback and suggestion in the comment section below.

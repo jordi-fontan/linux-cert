@@ -1,0 +1,136 @@
+Examples of nslookup command in Linux
+Let me show you some examples of the nslookup command.
+
+1. Get the IP address of a website
+In its simplest form, without any options, nslookup returns domain name and IP address (both IPv4 and IPv6). One of the most popular use of nslookup is to get the IP address of a website in Linux using this method.
+
+nslookup <URL>
+Here’s a sample output:
+
+nslookup linuxhandbook.com
+Server: 127.0.0.53
+Address: 127.0.0.53#53
+
+Non-authoritative answer:
+Name: linuxhandbook.com
+Address: 142.93.143.135
+Name: linuxhandbook.com
+Address: fd00:0:12:13::8e5d:8f87
+The 127.0.0.53 address in the above command output is my own system’s DNS set by systemd. In some cases it could be 8.8.8.8 etc.
+
+❓
+What is non-authoritative answer?
+In the output of nslookup command, you’ll often notice ‘non-authoritative answer’. It means that the answer you got for your DNS query is coming for a non-authoritative source.
+It’s because when you use nslookup, the answer is not coming directly from the name server of the server you are querying. Mostly it comes from your internet service provider’s name server.
+2. Get the name server (NS records)
+You can also display just the name servers associated with a domain with nslookup. These name servers store various DNS related records. Usually, a domain has more than one name server for backup purposes.
+
+To display just name servers, all you need to do is to specify the type of your nslookup query:
+
+nslookup -type=ns <URL>
+The sample output for Linux Handbook website is:
+
+nslookup -type=ns linuxhandbook.com
+Server: 127.0.0.53
+Address: 127.0.0.53#53
+
+Non-authoritative answer:
+linuxhandbook.com nameserver = dns2.registrar-servers.com.
+linuxhandbook.com nameserver = dns1.registrar-servers.com.
+
+Authoritative answers can be found from:
+3. Display MX records
+MX records in DNS specify the mail server settings for the domain name. This determines which mail server handles the email for the domain in question.
+
+nslookup -type=mx <URL>
+A sample output could be like this:
+
+nslookup -type=mx itsfoss.com
+Server: 127.0.0.53
+Address: 127.0.0.53#53
+
+Non-authoritative answer:
+itsfoss.com mail exchanger = 5 alt2.aspmx.l.google.com.
+itsfoss.com mail exchanger = 1 aspmx.l.google.com.
+itsfoss.com mail exchanger = 10 alt3.aspmx.l.google.com.
+itsfoss.com mail exchanger = 5 alt1.aspmx.l.google.com.
+itsfoss.com mail exchanger = 10 alt4.aspmx.l.google.com.
+
+Authoritative answers can be found from:
+Do note that sometimes, the mail server settings are not defined and in those cases, the mx query with nslookup could return an output like this:
+
+nslookup -type=mx linuxhandbook.com
+Server: 127.0.0.53
+Address: 127.0.0.53#53
+
+Non-authoritative answer:
+*** Can’t find linuxhandbook.com: No answer
+
+Authoritative answers can be found from:
+4. Get SOA record with nslookup
+You can query and display the SOA (Start of Authority) record with nslookup by specifying the type of query:
+
+nslookup -type=soa <URL>
+A sample output would be like this:
+
+nslookup -type=soa linuxhandbook.com
+Server: 127.0.0.53
+Address: 127.0.0.53#53
+
+Non-authoritative answer:
+linuxhandbook.com
+origin = dns1.registrar-servers.com
+mail addr = hostmaster.registrar-servers.com
+serial = 2019051520
+refresh = 43200
+retry = 3600
+expire = 604800
+minimum = 3601
+
+Authoritative answers can be found from:
+You can read about the various attributes of the SOA record here.
+
+5. Display all DNS records with nslookup
+You can display all the above records (that are set) in one single command using any option.
+
+nslookup -type=any <URL>
+And you’ll see a consolidated output of all the above commands:
+
+nslookup -type=any linuxhandbook.com
+Server: 127.0.0.53
+Address: 127.0.0.53#53
+
+Non-authoritative answer:
+linuxhandbook.com
+origin = dns1.registrar-servers.com
+mail addr = hostmaster.registrar-servers.com
+serial = 2019051520
+refresh = 43200
+retry = 3600
+expire = 604800
+minimum = 3601
+linuxhandbook.com nameserver = dns1.registrar-servers.com.
+linuxhandbook.com nameserver = dns2.registrar-servers.com.
+Name: linuxhandbook.com
+Address: 142.93.143.135
+
+Authoritative answers can be found from:
+6. Reverse DNS lookup
+So far, you have queried the DNS for a certain domain and got its IP address. You can do the reverse DNS lookup and search for the domain name associated with an IP address.
+
+nslookup <IP_ADDRESS>
+For example, if I do a reverse DNS lookup with nslookup on Linux Handbook’s server, this is the answer I get:
+
+nslookup 142.93.143.135
+135.143.93.142.in-addr.arpa name = 217283.cloudwaysapps.com.
+
+Authoritative answers can be found from:
+You didn’t expect this output, did you? It’s because Linux Handbook was hosted via Cloudways at the time of writing this article. With Cloudways, you can install multiple WordPress websites in a few clicks. When a new WordPress install is created, it is placed at Cloudways’s own URL. The DNS setting is later changed to the intended website’s address.
+
+This is the reason why the output shows the address of Cloudways instead of linuxhandbook.com
+
+7. Query specific DNS server port with nslookup
+DNS servers use TCP protocol and thus port 53 is used by default. If a DNS server used some other port, you can specify the port in your query with nslookup:
+
+nslookup -port=<Port_Number> <URL>
+I think that’s enough material for you to know how to use nslookup command in Linux. If you have questions or suggestions, feel free to leave a comment below.
